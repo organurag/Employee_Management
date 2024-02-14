@@ -1,0 +1,272 @@
+﻿@* @model Employee_Client.Models.Employee;
+
+@{
+    ViewData["Title"] = (Model.EmployeeId == 0) ? "Add Employee" : "Update Employee";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AddOrUpdate" method="post">
+    <input type="hidden" asp-for="EmployeeId" /> <!-- Hidden field for EmployeeId -->
+
+    <div class="form-group">
+        <label asp-for="EmployeeName" class="control-label"></label>
+        <input asp-for="EmployeeName" class="form-control" />
+        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+                <label asp-for="EmployeeDesignation" class="control-label"></label>
+                <input asp-for="EmployeeDesignation" class="form-control" />
+                <span asp-validation-for="EmployeeDesignation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeSalary" class="control-label"></label>
+                <input asp-for="EmployeeSalary" class="form-control" />
+                <span asp-validation-for="EmployeeSalary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateId" class="control-label"></label>
+                <select asp-for="StateId" class="form-control" id="stateDropdown">
+                <option value="">Select State</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DistrictId" class="control-label"></label>
+                <select asp-for="DistrictId" class="form-control" id="districtDropdown">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CityId" class="control-label"></label>
+                <select asp-for="CityId" class="form-control" id="cityDropdown">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeAddress" class="control-label"></label>
+                <input asp-for="EmployeeAddress" class="form-control" />
+                <span asp-validation-for="EmployeeAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeMobileNo" class="control-label"></label>
+                <input asp-for="EmployeeMobileNo" class="form-control" />
+                <span asp-validation-for="EmployeeMobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+    <!-- Add other input fields for Employee properties as needed -->
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     // $(document).ready(function () {
+     //     // Function to fetch states data from API
+     //     function loadStates() {
+     //         $.ajax({
+     //             url: 'https://localhost:7187/api/Employees/States',
+     //             type: 'GET',
+     //             success: function (data) {
+     //                 // Clear existing options and add new options based on the retrieved data
+     //                 $('#stateDropdown').empty().append('<option value="">Select State</option>');
+     //                 $.each(data, function (index, state) {
+     //                     $('#stateDropdown').append('<option value="' + state.stateId + '">' + state.stateName + '</option>');
+     //                 });
+     //             },
+     //             error: function (xhr, status, error) {
+     //                 console.error(error);
+     //                 // Handle error
+     //             }
+     //         });
+     //     }
+
+     //     // Call the loadStates function to fetch and populate the states dropdown
+     //     loadStates();
+     // });
+
+
+
+
+    $(document).ready(function () {
+
+         function loadStates() {
+             $.ajax({
+                 url: 'https://localhost:7187/api/Employees/States',
+                 type: 'GET',
+                 success: function (data) {
+                     // Clear existing options and add new options based on the retrieved data
+                     $('#stateDropdown').empty().append('<option value="">Select State</option>');
+                     $.each(data, function (index, state) {
+                         $('#stateDropdown').append('<option value="' + state.stateId + '">' + state.stateName + '</option>');
+                     });
+                 },
+                 error: function (xhr, status, error) {
+                     console.error(error);
+                     // Handle error
+                 }
+             });
+         }
+
+         // Call the loadStates function to fetch and populate the states dropdown
+         loadStates();
+
+        $("#stateDropdown").change(function () {
+            var stateId = $(this).val();
+            $.ajax({
+                url: 'https://localhost:7187/api/Employees/districts/' + stateId,
+                type: "GET",
+                success: function (data) {
+                    $("#districtDropdown").empty().append('<option value="">Select District</option>');
+                    $.each(data, function (index, district) {
+                        $("#districtDropdown").append('<option value="' + district.value + '">' + district.text + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    // Handle error
+                }
+            });
+        });
+
+
+        $("#districtDropdown").change(function () {
+            var districtId = $(this).val();
+            $.ajax({
+                url: 'https://localhost:7187/api/Employees/cities/' + districtId,
+                type: "GET",
+                data: { districtId: districtId },
+                success: function (data) {
+                    $("#cityDropdown").empty().append('<option value="">Select City</option>');
+                    $.each(data, function (index, city) {
+                        $("#cityDropdown").append('<option value="' + city.value + '">' + city.text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script> *@
+
+
+@model Employee_Client.Models.Employee;
+
+@{
+    ViewData["Title"] = (Model.EmployeeId == 0) ? "Add Employee" : "Update Employee";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AddOrUpdate" method="post">
+    <input type="hidden" asp-for="EmployeeId" />
+
+    <div class="form-group">
+        <label asp-for="EmployeeName" class="control-label"></label>
+        <input asp-for="EmployeeName" class="form-control" />
+        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeDesignation" class="control-label"></label>
+        <input asp-for="EmployeeDesignation" class="form-control" />
+        <span asp-validation-for="EmployeeDesignation" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeSalary" class="control-label"></label>
+        <input asp-for="EmployeeSalary" class="form-control" />
+        <span asp-validation-for="EmployeeSalary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StateId" class="control-label"></label>
+        <select asp-for="StateId" class="form-control" id="stateDropdown">
+            <option value="">Select State</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DistrictId" class="control-label"></label>
+        <select asp-for="DistrictId" class="form-control" id="districtDropdown">
+            <option value="">Select District</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CityId" class="control-label"></label>
+        <select asp-for="CityId" class="form-control" id="cityDropdown">
+            <option value="">Select City</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmployeeAddress" class="control-label"></label>
+        <input asp-for="EmployeeAddress" class="form-control" />
+        <span asp-validation-for="EmployeeAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeMobileNo" class="control-label"></label>
+        <input asp-for="EmployeeMobileNo" class="form-control" />
+        <span asp-validation-for="EmployeeMobileNo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function loadStates() {
+            $.ajax({
+                url: 'https://localhost:7187/api/Employees/States',
+                type: 'GET',
+                success: function (data) {
+                    $('#stateDropdown').empty().append('<option value="">Select State</option>');
+                    $.each(data, function (index, state) {
+                        $('#stateDropdown').append('<option value="' + state.stateId + '">' + state.stateName + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        loadStates();
+
+        $("#stateDropdown").change(function () {
+            var stateId = $(this).val();
+            $.ajax({
+                url: 'https://localhost:7187/api/Employees/districts/' + stateId,
+                type: "GET",
+                success: function (data) {
+                    $("#districtDropdown").empty().append('<option value="">Select District</option>');
+                    $.each(data, function (index, district) {
+                        $("#districtDropdown").append('<option value="' + district.value + '">' + district.text + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $("#districtDropdown").change(function () {
+            var districtId = $(this).val();
+            $.ajax({
+                url: 'https://localhost:7187/api/Employees/cities/' + districtId,
+                type: "GET",
+                success: function (data) {
+                    $("#cityDropdown").empty().append('<option value="">Select City</option>');
+                    $.each(data, function (index, city) {
+                        $("#cityDropdown").append('<option value="' + city.value + '">' + city.text + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

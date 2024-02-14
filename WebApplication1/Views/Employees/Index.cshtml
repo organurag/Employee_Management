@@ -1,0 +1,114 @@
+﻿@model IEnumerable<WebApplication1.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+    <a asp-action="AddOrUpdate">Add/Update</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeDesignation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeSalary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeMobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeDesignation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeSalary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeMobileNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City.CityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District.DistrictName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State.StateName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#stateDropdown").change(function () {
+                var stateId = $(this).val();
+                $.ajax({
+                    url: "@Url.Action("GetDistrictsByState", "Employees")",
+                    type: "GET",
+                    data: { stateId: stateId },
+                    success: function (data) {
+                        $("#districtDropdown").empty().append('<option value="">Select District</option>');
+                        $.each(data, function (index, district) {
+                            $("#districtDropdown").append('<option value="' + district.value + '">' + district.text + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $("#districtDropdown").change(function () {
+                var districtId = $(this).val();
+                $.ajax({
+                    url: "@Url.Action("GetCitiesByDistrict", "Employees")",
+                    type: "GET",
+                    data: { districtId: districtId },
+                    success: function (data) {
+                        $("#cityDropdown").empty().append('<option value="">Select City</option>');
+                        $.each(data, function (index, city) {
+                            $("#cityDropdown").append('<option value="' + city.value + '">' + city.text + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

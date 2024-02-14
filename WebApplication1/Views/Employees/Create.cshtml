@@ -1,0 +1,106 @@
+﻿@model WebApplication1.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Employee</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployeeName" class="control-label"></label>
+                <input asp-for="EmployeeName" class="form-control" />
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeDesignation" class="control-label"></label>
+                <input asp-for="EmployeeDesignation" class="form-control" />
+                <span asp-validation-for="EmployeeDesignation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeSalary" class="control-label"></label>
+                <input asp-for="EmployeeSalary" class="form-control" />
+                <span asp-validation-for="EmployeeSalary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateId" class="control-label"></label>
+                <select asp-for="StateId" class="form-control" id="stateDropdown">
+                    <option value="">Select State</option>
+                    @foreach (var state in ViewBag.StateName)
+                    {
+                        <option value="@state.Value">@state.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DistrictId" class="control-label"></label>
+                <select asp-for="DistrictId" class="form-control" id="districtDropdown">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CityId" class="control-label"></label>
+                <select asp-for="CityId" class="form-control" id="cityDropdown">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeAddress" class="control-label"></label>
+                <input asp-for="EmployeeAddress" class="form-control" />
+                <span asp-validation-for="EmployeeAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeMobileNo" class="control-label"></label>
+                <input asp-for="EmployeeMobileNo" class="form-control" />
+                <span asp-validation-for="EmployeeMobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#stateDropdown').change(function () {
+                var stateId = $(this).val(); // Get the selected state ID
+                console.log("Selected state ID: " + stateId); // Check the selected state ID in browser console
+                $.get('@Url.Action("GetDistrictsByState", "Employees")', { stateId: stateId }, function (data) {
+                    $('#districtDropdown').empty();
+                    $('#districtDropdown').append($('<option>').text('Select District').val(''));
+                    $.each(data, function (index, district) {
+                        $('#districtDropdown').append($('<option>').text(district.text).val(district.value));
+                    });
+                });
+            });
+
+            $('#districtDropdown').change(function () {
+                var districtId = $(this).val(); // Get the selected district ID
+                $.get('@Url.Action("GetCitiesByDistrict", "Employees")', { districtId: districtId }, function (data) {
+                    $('#cityDropdown').empty();
+                    $('#cityDropdown').append($('<option>').text('Select City').val(''));
+                    $.each(data, function (index, city) {
+                        $('#cityDropdown').append($('<option>').text(city.text).val(city.value));
+                    });
+                });
+            });
+        });
+    </script>
+
+
+
+
+}

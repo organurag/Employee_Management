@@ -1,0 +1,21 @@
+﻿@model Employee
+
+@{
+    ViewData["Title"] = (Model.EmployeeId == 0) ? "Add Employee" : "Update Employee";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AddOrUpdate" method="post">
+    <input type="hidden" asp-for="EmployeeId" /> <!-- Hidden field for EmployeeId -->
+
+    <div class="form-group">
+        <label asp-for="EmployeeName" class="control-label"></label>
+        <input asp-for="EmployeeName" class="form-control" />
+        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+    </div>
+
+    <!-- Add other input fields for Employee properties as needed -->
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
