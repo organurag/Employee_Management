@@ -215,6 +215,11 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 <script>
     $(document).ready(function () {
         function loadStates() {

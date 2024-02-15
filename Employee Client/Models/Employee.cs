@@ -7,33 +7,34 @@ namespace Employee_Client.Models
 {
     public class Employee
     {
-
+        [Required]
         [Key]
         public int EmployeeId { get; set; }
 
+        [Required]
         [StringLength(100)]
-        
         public string EmployeeName { get; set; }
 
-        [StringLength(100)]
-        
-        public string EmployeeDesignation { get; set; }
+        [Required]
 
+        [StringLength(100)]        
+        public string EmployeeDesignation { get; set; }
+        [Required]
         [Column(TypeName = "decimal(10, 2)")]
         public decimal? EmployeeSalary { get; set; }
-
+        [Required]
         public int? StateId { get; set; }
-
+        [Required]
         public int? DistrictId { get; set; }
-
+        [Required]
         public int? CityId { get; set; }
 
         [StringLength(255)]
-        
+        [Required]
         public string EmployeeAddress { get; set; }
 
         [StringLength(15)]
-        
+        [Required]
         public string EmployeeMobileNo { get; set; }
 
         [ForeignKey("CityId")]
